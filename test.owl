@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:owl="http://www.w3.org/2002/07/owl#"
+         xml:base="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology"
+         xmlns="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#">
+
+<owl:Ontology rdf:about="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology"/>
+
+<owl:ObjectProperty rdf:about="#содержит">
+  <rdfs:domain rdf:resource="#ЯзыкПрограммирования"/>
+  <rdfs:range rdf:resource="#ТипДанных"/>
+</owl:ObjectProperty>
+
+<owl:Class rdf:about="#ЯзыкПрограммирования"/>
+
+<owl:Class rdf:about="#ТипДанных"/>
+
+<owl:Class rdf:about="#МодификаторДоступа"/>
+
+<owl:Class rdf:about="#ПонятиеООП"/>
+
+<ЯзыкПрограммирования rdf:about="#Java">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ЯзыкПрограммирования>
+
+<МодификаторДоступа rdf:about="#private">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</МодификаторДоступа>
+
+<МодификаторДоступа rdf:about="#public">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</МодификаторДоступа>
+
+<rdf:Description rdf:about="#Инкапсуляция">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<ТипДанных rdf:about="#Класс">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ТипДанных>
+
+<ПонятиеООП rdf:about="#Наследование">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ПонятиеООП>
+
+<rdf:Description rdf:about="#Полиморфизм">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</rdf:Description>
+
+<ЯзыкПрограммирования rdf:about="#c">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ЯзыкПрограммирования>
+
+<ЯзыкПрограммирования rdf:about="#ruby">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ЯзыкПрограммирования>
+
+<ЯзыкПрограммирования rdf:about="#delphi">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ЯзыкПрограммирования>
+
+<ТипДанных rdf:about="#тип_данных">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ТипДанных>
+
+<ТипДанных rdf:about="#интерфейс">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ТипДанных>
+
+<ТипДанных rdf:about="#существующего">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ТипДанных>
+
+<МодификаторДоступа rdf:about="#protected">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</МодификаторДоступа>
+
+<МодификаторДоступа rdf:about="#модификаторы">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</МодификаторДоступа>
+
+<ПонятиеООП rdf:about="#множественное">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ПонятиеООП>
+
+<ПонятиеООП rdf:about="#единичное">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ПонятиеООП>
+
+<ПонятиеООП rdf:about="#порождение">
+  <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#NamedIndividual"/>
+</ПонятиеООП>
+
+
+</rdf:RDF>
