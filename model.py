@@ -14,7 +14,7 @@ def train_word2vec(sentences, min_count, window, size, sample, epochs):
                          window=window,
                          size=size,
                          sample=sample,
-                         workers=cores,
+                         workers=2,
                          sg=1,
                          hs=1,
                          negative=0)

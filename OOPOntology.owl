@@ -92,6 +92,14 @@
     
 
 
+    <!-- http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Python -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Python">
+        <rdf:type rdf:resource="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#ЯзыкПрограммирования"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#private -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#private">
@@ -108,9 +116,9 @@
     
 
 
-    <!-- http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Наследование -->
+    <!-- http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Полиморфизм -->
 
-    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Наследование">
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#Полиморфизм">
         <rdf:type rdf:resource="http://www.semanticweb.org/никита/ontologies/2020/1/oopontology#ПринципООП"/>
     </owl:NamedIndividual>
     

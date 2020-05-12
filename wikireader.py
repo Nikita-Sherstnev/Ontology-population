@@ -4,7 +4,12 @@ wiki_wiki = wikipediaapi.Wikipedia('ru')
 
 
 def add_sections(sections, text, level=0):
-    ignored_sections = ["См. также", "Примечания", "Литература", "Ссылки"]
+    ignored_sections = ["См. также", "Примечания",
+                        "Литература", "Ссылки", "История",
+                        "Проектирование программ в целом",
+                        "Различные ООП-методологии",
+                        "Производительность объектных программ",
+                        "Критика ООП"]
     clean_sections = [s for s in sections if s.title not in ignored_sections]
     for s in clean_sections:
         text += s.text
