@@ -14,12 +14,12 @@ def parse_text_to_words(text):
 
     sentences = nltk.sent_tokenize(text, language="russian")
 
-    new_sentences = []
+    tokenized_sentences = []
     for sent in sentences:
         sent = nltk.word_tokenize(sent, language="russian")
-        new_sentences.append(sent)
+        tokenized_sentences.append(sent)
 
-    return new_sentences
+    return tokenized_sentences
 
 
 def normalization(sentences):
@@ -35,12 +35,12 @@ def normalization(sentences):
     stopw.extend(["это", "является", "таким", "образом", "—", "“", "„",
                   "«", "»"])
 
-    low_sentences = []
+    low_case_sentences = []
     for sent in sentences:
         new_list = [word.lower() for word in sent]
-        low_sentences.append(new_list)
+        low_case_sentences.append(new_list)
 
-    for sent in low_sentences:
+    for sent in low_case_sentences:
         new_list = [word for word in sent if word not in string.punctuation
                     and word not in stopw]
         new_sentences.append(new_list)
@@ -49,7 +49,7 @@ def normalization(sentences):
 
 
 def pos_tagging(sentences):
-    tagged_sentences_with_joined_words = []
+    '''Returns dictionary'''
     tagged_sentences = nltk.pos_tag_sents(sentences, lang='rus')
 
     tagged_words = {}
@@ -84,4 +84,5 @@ def show_most_frequent_words(sentences, amount=10):
     words = [word for sent in sentences for word in sent]
     print("Unique words:", len(set(words)))
     freq = nltk.FreqDist(words)
-    freq.most_common(amount)
+    for word in freq.most_common(amount):
+        print(word)

@@ -1,6 +1,22 @@
 import multiprocessing
 from gensim.models import Word2Vec
 import time
+from gensim.models.callbacks import CallbackAny2Vec
+
+
+class callback(CallbackAny2Vec):
+    def __init__(self):
+        self.epoch = 0
+
+    def on_epoch_end(self, model):
+        loss = model.get_latest_training_loss()
+        if self.epoch == 0:
+            print('Loss after epoch {}: {}'.format(self.epoch, loss))
+        elif(self.epoch % 10 == 0):
+            print('Loss after epoch {}: {}'.format(
+                self.epoch, loss - self.loss_previous_step))
+        self.epoch += 1
+        self.loss_previous_step = loss
 
 
 def train_word2vec(sentences, min_count, window, size, sample, epochs):
@@ -26,9 +42,12 @@ def train_word2vec(sentences, min_count, window, size, sample, epochs):
     w2v_model.train(
         sentences,
         total_examples=w2v_model.corpus_count,
-        epochs=epochs)
+        epochs=epochs,
+        compute_loss=True,
+        callbacks=[callback()])
 
     end_time = time.time()
+    print("Время обучения: ")
     print(end_time - start_time)
 
     w2v_model.init_sims(replace=True)  # saves memory

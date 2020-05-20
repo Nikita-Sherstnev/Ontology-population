@@ -10,9 +10,10 @@ def populate_ontology(w2v_model, tagged_words, input_onto, output_onto, topn):
     world = World()
     onto = world.get_ontology(input_onto).load()
 
-    classes = onto.classes()
+    onto_classes = onto.classes()
 
-    for onto_class in classes:
+    new_instances_counter = 0
+    for onto_class in onto_classes:
         instances = [nlp.get_name_from_IRI(inst)
                      for inst in onto.get_instances_of(onto_class)]
 
@@ -30,21 +31,21 @@ def populate_ontology(w2v_model, tagged_words, input_onto, output_onto, topn):
         for inst in instances:
             tags.append(tagged_words[inst])
 
-        for s in similar:
+        for s in similar[:]:
             if tagged_words[s[0]] not in tags:
                 similar.remove(s)
 
-        new_similar = []
+        for s in similar[:]:
+            if s[1] <= 0.4:
+                similar.remove(s)
+
+        print_class_and_similar(onto_class, similar, tagged_words)
+
         for s in similar:
-            if s[1] >= 0.5:
-                new_similar.append(s)
-
-        print_class_and_similar(onto_class, new_similar, tagged_words)
-
-        for s in new_similar:
+            new_instances_counter += 1
             # Сохранение найденных экземпляров класса.
             eval("onto." + str(onto_class).split(".")[1] + "(s[0])")
-
+    print("Всего новых экземляров: " + str(new_instances_counter))
     onto.save(file=output_onto)
 
 

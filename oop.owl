@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/nik/ontologies/2020/oop#"
+     xml:base="http://www.semanticweb.org/nik/ontologies/2020/oop"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#ДинамическийТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#ДинамическийТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#СтатическийТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#ПростойТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#ПростойТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#СоставнойТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#СоставнойТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#СоставнойТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#СтатическийТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#СтатическийТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ВстроенныйТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ВстроенныйТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ПользовательскийТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ЗначимыйТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ЗначимыйТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#СсылочныйТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#КлючевоеСлово -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#КлючевоеСлово">
+        <owl:disjointWith rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ПользовательскийТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ПользовательскийТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#СсылочныйТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#СсылочныйТипДанных">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ТипДанных"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#class -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#class">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#КлючевоеСлово"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#int -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#int">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#КлючевоеСлово"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#класс -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#класс">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ПользовательскийТипДанных"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#СсылочныйТипДанных"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#массив -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#массив">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#СоставнойТипДанных"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#перечисление -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#перечисление">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#ПростойТипДанных"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#стек -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#стек">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#ДинамическийТипДанных"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.semanticweb.org/nik/ontologies/2020/oop#целый -->
+
+    <owl:NamedIndividual rdf:about="http://www.semanticweb.org/nik/ontologies/2020/oop#целый">
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/oop#СтатическийТипДанных"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ВстроенныйТипДанных"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/nik/ontologies/2020/untitled-ontology-50#ЗначимыйТипДанных"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
