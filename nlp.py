@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import nltk
 import re
 from nltk.corpus import stopwords
@@ -29,11 +28,12 @@ def normalization(sentences):
     знаки пунктуации и стоп-слова. Все слова приводятся к нижнему регистру.
     """
     new_sentences = []
-    stopw = []
+    extended_stopwords = []
     for word in stopwords.words('russian'):
-        stopw.append(word)
-    stopw.extend(["это", "является", "таким", "образом", "—", "“", "„",
-                  "«", "»"])
+        extended_stopwords.append(word)
+
+    extended_stopwords.extend(["это", "является", "таким", "образом", "—", "“", "„",
+                               "«", "»", 'глава', '//', "''"])
 
     low_case_sentences = []
     for sent in sentences:
@@ -42,7 +42,7 @@ def normalization(sentences):
 
     for sent in low_case_sentences:
         new_list = [word for word in sent if word not in string.punctuation
-                    and word not in stopw]
+                    and word not in extended_stopwords]
         new_sentences.append(new_list)
 
     return new_sentences

@@ -19,7 +19,7 @@ class callback(CallbackAny2Vec):
         self.loss_previous_step = loss
 
 
-def train_word2vec(sentences, min_count, window, size, sample, epochs):
+def train_word2vec(sentences, min_count, window, size, sample, epochs, sg, hs, negative):
     """
     Принимает на вход массив предложений и выдает обученную модель
     Word2Vec.
@@ -30,10 +30,10 @@ def train_word2vec(sentences, min_count, window, size, sample, epochs):
                          window=window,
                          size=size,
                          sample=sample,
-                         workers=2,
-                         sg=1,
-                         hs=1,
-                         negative=0)
+                         workers=cores,
+                         sg=sg,
+                         hs=hs,
+                         negative=negative)
 
     w2v_model.build_vocab(sentences)
 

@@ -1,5 +1,12 @@
 __pycache__/
 
-.vscode
+.vscode/
+.ipynb_checkpoints/
 
 libs_try_outs/
+ontologies/
+texts/
+vectors/
+output_ontologies/
+
+correct_instances.py
