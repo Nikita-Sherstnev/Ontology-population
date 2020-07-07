@@ -12,6 +12,8 @@ def populate_ontology(w2v_vectors, tagged_words, correct_instances, input_onto, 
     correct_instances_amount = len(correct_instances)
     onto = world.get_ontology(input_onto).load()
 
+    correct_instances = correct_instances.copy()
+
     onto_classes = onto.classes()
 
     new_instances_counter = 0
@@ -38,9 +40,9 @@ def populate_ontology(w2v_vectors, tagged_words, correct_instances, input_onto, 
                 if tagged_words[s[0]] not in tags:
                     similar.remove(s)
 
-        # for s in similar[:]:
-        #     if s[1] <= 0.4:
-        #         similar.remove(s)
+        for s in similar[:]:
+            if s[1] <= 0.5:
+                similar.remove(s)
 
         print_class_and_similar(onto_class, similar, tagged_words)
 

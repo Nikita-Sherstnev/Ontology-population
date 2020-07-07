@@ -10,7 +10,6 @@ def parse_text_to_words(text):
     Функция принимает на вход обычный текст. На выходе получаем
     двумерный массив из предложений и слов, эти предложения составляющих. 
     """
-
     sentences = nltk.sent_tokenize(text, language="russian")
 
     tokenized_sentences = []
@@ -35,10 +34,7 @@ def normalization(sentences):
     extended_stopwords.extend(["это", "является", "таким", "образом", "—", "“", "„",
                                "«", "»", 'глава', '//', "''"])
 
-    low_case_sentences = []
-    for sent in sentences:
-        new_list = [word.lower() for word in sent]
-        low_case_sentences.append(new_list)
+    low_case_sentences = [[word.lower() for word in sent] for sent in sentences]
 
     for sent in low_case_sentences:
         new_list = [word for word in sent if word not in string.punctuation
@@ -46,6 +42,7 @@ def normalization(sentences):
         new_sentences.append(new_list)
 
     return new_sentences
+
 
 
 def pos_tagging(sentences):
