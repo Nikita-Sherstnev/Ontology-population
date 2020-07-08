@@ -1,6 +1,5 @@
 # %%
 
-import correct_instances
 from gensim.models import Word2Vec
 import ontology
 import graphics
@@ -8,6 +7,7 @@ import model
 import nlp
 import wikireader
 import itertools
+import correct_instances
 from gensim.models.keyedvectors import KeyedVectors
 
 INPUT_ONTO = '../ontologies/oopOnto.owl'
