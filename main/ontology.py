@@ -2,21 +2,14 @@ from owlready2 import *
 import nlp
 
 
-def populate_ontology(w2v_vectors, tagged_words, correct_instances, input_onto, output_onto, topn):
-    """
-    Функция загружает онтологию в память, извлекает из нее индивидов
-    классов и на их основе ищет потенциальных индивидов.
-    """
-    world = World()
-    matches = 0
-    correct_instances_amount = len(correct_instances)
-    onto = world.get_ontology(input_onto).load()
+def find_candidate_instances(w2v_vectors, tagged_words, input_onto, topn):
+    candidate_instances = defaultdict(list)
 
-    correct_instances = correct_instances.copy()
+    world = World()
+    onto = world.get_ontology(input_onto).load()
 
     onto_classes = onto.classes()
 
-    new_instances_counter = 0
     for onto_class in onto_classes:
         instances = [nlp.get_name_from_IRI(inst)
                      for inst in onto.get_instances_of(onto_class)]
@@ -26,52 +19,82 @@ def populate_ontology(w2v_vectors, tagged_words, correct_instances, input_onto, 
             if inst not in w2v_vectors.vocab.keys():
                 instances.remove(inst)
 
-        similar = []
-        if(instances != []):
-            similar = w2v_vectors.most_similar(positive=instances,
-                                               topn=topn)
+        similar = find_by_cos_similarity(w2v_vectors, instances, onto_class, topn)
 
-        tags = []
-        for inst in instances:
-            tags.append(tagged_words[inst])
-
-        for s in similar[:]:
-            if s[0] in tagged_words:
-                if tagged_words[s[0]] not in tags:
-                    similar.remove(s)
+        similar = filter_by_pos(similar, instances, tagged_words)
 
         for s in similar[:]:
             if s[1] <= 0.5:
                 similar.remove(s)
 
-        print_class_and_similar(onto_class, similar, tagged_words)
+        candidate_instances[onto_class] = similar
+        
+    return candidate_instances
 
-        for s in similar:
-            # Если индивидуум класса найден правильно,
-            # увеличиваем счетчик.
-            if s[0] in correct_instances:
-                correct_instances.remove(s[0])
-                matches += 1
 
-            new_instances_counter += 1
-            # Сохранение найденных экземпляров класса.
-            eval("onto." + str(onto_class).split(".")[1] + "(s[0])")
+def find_by_cos_similarity(w2v_vectors, instances, onto_class, topn):
+    similar = list()
+    if(instances != []):
+        similar = w2v_vectors.most_similar(positive=instances,
+                                               topn=topn)
+    return similar
 
-    print("Всего новых экземляров: ", str(new_instances_counter))
+
+def filter_by_pos(similar, instances, tagged_words):
+    tags = []
+    for inst in instances:
+        tags.append(tagged_words[inst])
+
+    for s in similar[:]:
+        if s[0] in tagged_words:
+            if tagged_words[s[0]] not in tags:
+                similar.remove(s)
+
+    return similar
+
+
+def populate_ontology(candidate_instances, input_onto, output_onto):
+    world = World()
+    
+    onto = world.get_ontology(input_onto).load()
+
+    for onto_class, instances in candidate_instances.items():
+
+        print_class_and_similar(onto_class, instances)
+
+        for inst in instances:
+            # Сохранение экземпляров класса.
+            eval("onto." + str(onto_class).split(".")[1] + "(inst[0])")
+
+
     onto.save(file=output_onto)
-    print('Экземпляров в тексте: ', correct_instances_amount)
-    print('Правильно извлеченные экземпляры: ', matches)
-    print('Полнота: ', matches/correct_instances_amount)
-    print('Точность: ', matches/new_instances_counter)
 
 
-def print_class_and_similar(onto_class, similar, tagged_words):
+def calculate_metrics(candidate_instances, correct_instances):
+    matches_counter = 0
+    new_instances_counter = 0
+    correct_instances_amount = len(correct_instances)
+    correct_instances = correct_instances.copy()
+
+    for _, instances in candidate_instances.items():
+        for inst in instances:
+            new_instances_counter += 1
+
+            if inst[0] in correct_instances[:]:
+                matches_counter += 1
+                correct_instances.remove(inst[0])
+            
+
+    print('Всего новых экземляров: ', str(new_instances_counter))   
+    print('Экземпляров в тексте: ',  correct_instances_amount)
+    print('Правильно извлеченные экземпляры: ', matches_counter)
+    print('Полнота: ', matches_counter/correct_instances_amount)
+    print('Точность: ', matches_counter/new_instances_counter)
+
+
+def print_class_and_similar(onto_class, similar):
     print(str(onto_class).split(".")[1])
     for sim in similar:
-        print("{}: {:.4f}".format(sim[0], sim[1]), end=' ')
-        if sim[0] in tagged_words:
-            print(tagged_words[sim[0]])
-        else:
-            print()
+        print("{}: {:.4f}".format(sim[0], sim[1]))
 
     print()

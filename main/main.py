@@ -24,7 +24,7 @@ text_to_parse = wikireader.collect_wiki_articles(['Объектно-ориент
 ["Основные понятия", "Определение ООП и его основные концепции",
     "Особенности реализации", "Объектно-ориентированные языки"])
 
-print(text_to_parse)
+print(text_to_parse[:50])
 
 # %%
 sentences = nlp.parse_text_to_words(text_to_parse)
@@ -72,7 +72,7 @@ w2v_model = model.train_word2vec(sentences,
 
 print('Размер словаря: ', len(w2v_model.wv.vocab))
 
-word_vectors = w2v_model.wv
+w2v_vectors = w2v_model.wv
 
 # Save new vectors
 # w2v_model.wv.save('../vectors/sch_types.kv')
@@ -80,8 +80,8 @@ word_vectors = w2v_model.wv
 # %%
 # Reuse vectors
 
-# word_vectors = KeyedVectors.load('../vectors/ric_types.kv')
-# word_vectors = w2v_model.wv
+# w2v_vectors = KeyedVectors.load('../vectors/ric_types.kv')
+# w2v_vectors = w2v_model.wv
 # w2v_model.wv.save('../vectors/sch_types.kv')
 
 # %%
@@ -90,12 +90,13 @@ tagged_words = nlp.pos_tagging(sentences)
 # %%
 
 #print(dict(itertools.islice(tagged_words.items(), 5)))
-ontology.populate_ontology(word_vectors,
-                           tagged_words,
-                           correct_instances=CORRECT_INSTANCES,
+candidate_instances = ontology.find_candidate_instances(w2v_vectors, tagged_words, INPUT_ONTO, 30)
+
+ontology.populate_ontology(candidate_instances,
                            input_onto=INPUT_ONTO,
-                           output_onto=OUTPUT_ONTO,
-                           topn=30)
+                           output_onto=OUTPUT_ONTO)
+
+ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
 
 print(CORRECT_INSTANCES)
 
@@ -106,3 +107,10 @@ print(CORRECT_INSTANCES)
 #                                   'язык', 'полиморфизм'])
 
 # graphics.display_pca_scatterplot(word_vectors, sample=20)
+
+# %%
+
+ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
+
+
+# %%
