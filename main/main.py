@@ -1,19 +1,23 @@
 # %%
 
-from gensim.models import Word2Vec
-import ontology
-import graphics
-import model
-import nlp
-import wikireader
-import itertools
+import pymorphy2
 import correct_instances
+import itertools
+import wikireader
+import nlp
+import model
+import graphics
+import ontology
+from gensim.models import Word2Vec
 from gensim.models.keyedvectors import KeyedVectors
+%reload_ext autoreload
+%autoreload 2
 
 INPUT_ONTO = '../ontologies/oopOnto.owl'
 OUTPUT_ONTO = '../ontologies/oopOntoPopulated.owl'
 CORRECT_INSTANCES_FILE = '../instances/oop_instances.txt'
-CORRECT_INSTANCES = correct_instances.parse_instances_from_txt(CORRECT_INSTANCES_FILE)
+CORRECT_INSTANCES = correct_instances.parse_instances_from_txt(
+    CORRECT_INSTANCES_FILE)
 
 # %%
 
@@ -21,13 +25,13 @@ CORRECT_INSTANCES = correct_instances.parse_instances_from_txt(CORRECT_INSTANCES
 #     text_to_parse = f.read()
 
 text_to_parse = wikireader.collect_wiki_articles(['Объектно-ориентированное программирование'],
-["Основные понятия", "Определение ООП и его основные концепции",
-    "Особенности реализации", "Объектно-ориентированные языки"])
+                                                 ["Основные понятия", "Определение ООП и его основные концепции",
+                                                  "Особенности реализации", "Объектно-ориентированные языки"])
 
-print(text_to_parse[:50])
+print(text_to_parse[:100])
 
 # %%
-sentences = nlp.parse_text_to_words(text_to_parse)
+sentences = nlp.tokenize_text(text_to_parse)
 
 words_amount = sum([len(sent) for sent in sentences])
 print(f'Кол-во предложений: {str(len(sentences))}')
@@ -36,20 +40,29 @@ print(f'Кол-во слов: {str(words_amount)}')
 
 # %%
 
-sentences_array = nlp.normalization(sentences)
+sentences_list = nlp.normalization(sentences)
 
 words_amount = sum([len(sent) for sent in sentences_array])
 print('После нормализации:')
 print(f'Кол-во предложений: {str(len(sentences_array))}')
 print(f'Кол-во слов: {str(words_amount)}')
-for sent in sentences_array[:10]:
+for sent in sentences_list[:5]:
     print(sent)
 
 # %%
 
-sentences = nlp.add_bigrams(sentences_array, 20, 15.0)
+morph = pymorphy2.MorphAnalyzer()
+
+sentences_list = [[morph.parse(word)[0].normal_form
+                   for word in sent]
+                  for sent in sentences_list]
+
+
+# %%
+
+sentences = nlp.add_bigrams(sentences_list, 20, 15.0)
+
 for sent in sentences:
-    # Вывод биграмм
     for word in sent:
         for symbol in word:
             if symbol == '_':
@@ -61,14 +74,14 @@ nlp.show_most_frequent_words(sentences, amount=20)
 # Train new model
 
 w2v_model = model.train_word2vec(sentences,
-                                 min_count=2,
+                                 min_count=1,
                                  window=7,
                                  size=250,
                                  sample=0.001,
-                                 epochs=400,
-                                 sg=0,
-                                 hs=0,
-                                 negative=20)
+                                 epochs=300,
+                                 sg=1,
+                                 hs=1,
+                                 negative=0)
 
 print('Размер словаря: ', len(w2v_model.wv.vocab))
 
@@ -82,15 +95,14 @@ w2v_vectors = w2v_model.wv
 
 # w2v_vectors = KeyedVectors.load('../vectors/ric_types.kv')
 # w2v_vectors = w2v_model.wv
-# w2v_model.wv.save('../vectors/sch_types.kv')
 
 # %%
 
 tagged_words = nlp.pos_tagging(sentences)
 # %%
 
-#print(dict(itertools.islice(tagged_words.items(), 5)))
-candidate_instances = ontology.find_candidate_instances(w2v_vectors, tagged_words, INPUT_ONTO, 30)
+candidate_instances = ontology.find_candidate_instances(
+    w2v_vectors, tagged_words, INPUT_ONTO, 30)
 
 ontology.populate_ontology(candidate_instances,
                            input_onto=INPUT_ONTO,
@@ -98,7 +110,6 @@ ontology.populate_ontology(candidate_instances,
 
 ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
 
-print(CORRECT_INSTANCES)
 
 # %%
 # graphics.display_pca_scatterplot(word_vectors,
@@ -108,9 +119,9 @@ print(CORRECT_INSTANCES)
 
 # graphics.display_pca_scatterplot(word_vectors, sample=20)
 
-# %%
 
-ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
+# %%
+print(dict(itertools.islice(tagged_words.items(), 50)))
 
 
 # %%

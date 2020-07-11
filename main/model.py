@@ -1,6 +1,6 @@
 import multiprocessing
-from gensim.models import Word2Vec
 import time
+from gensim.models import Word2Vec
 from gensim.models.callbacks import CallbackAny2Vec
 
 
@@ -20,10 +20,6 @@ class callback(CallbackAny2Vec):
 
 
 def train_word2vec(sentences, min_count, window, size, sample, epochs, sg, hs, negative):
-    """
-    Принимает на вход массив предложений и выдает обученную модель
-    Word2Vec.
-    """
     cores = multiprocessing.cpu_count()
 
     w2v_model = Word2Vec(min_count=min_count,
