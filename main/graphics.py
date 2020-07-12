@@ -8,7 +8,7 @@ plt.style.use("ggplot")
 
 
 def display_pca_scatterplot(model, words=None, sample=0):
-    if words == None:
+    if words is None:
         if sample > 0:
             words = np.random.choice(list(model.vocab.keys()), sample)
         else:

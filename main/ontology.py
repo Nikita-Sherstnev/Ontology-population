@@ -1,4 +1,5 @@
-from owlready2 import *
+from owlready2 import World
+from collections import defaultdict
 import nlp
 
 
@@ -24,7 +25,7 @@ def find_candidate_instances(w2v_vectors, tagged_words, input_onto, topn):
         similar = filter_by_pos(similar, instances, tagged_words)
 
         for s in similar[:]:
-            if s[1] <= 0.4:
+            if s[1] <= 0.42:
                 similar.remove(s)
 
         candidate_instances[onto_class] = similar
@@ -51,6 +52,10 @@ def filter_by_pos(similar, instances, tagged_words):
                 similar.remove(s)
 
     return similar
+
+
+def calculate_similarity_threshold():
+    pass
 
 
 def populate_ontology(candidate_instances, input_onto, output_onto):
@@ -86,11 +91,16 @@ def calculate_metrics(candidate_instances, correct_instances):
                 matches_counter += 1
                 correct_instances.remove(inst[0])
 
+    recall = matches_counter/correct_instances_amount
+    precision = matches_counter/new_instances_counter
+    f_measure = 2 * (precision * recall) / (precision + recall)
+
     print('Экземпляров в тексте: ',  correct_instances_amount)
     print('Всего новых экземляров: ', str(new_instances_counter))
     print('Правильно извлеченные экземпляры: ', matches_counter)
-    print('Полнота: ', matches_counter/correct_instances_amount)
-    print('Точность: ', matches_counter/new_instances_counter)
+    print('Полнота: ', recall)
+    print('Точность: ', precision)
+    print('F-measure: ', f_measure)
 
 
 def print_class_and_similar(onto_class, similar):

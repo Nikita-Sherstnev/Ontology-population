@@ -1,8 +1,8 @@
+import string
 import nltk
 import re
 from nltk.corpus import stopwords
 from gensim.models.phrases import Phraser, Phrases
-import string
 
 
 def tokenize_text(plain_text) -> list:
@@ -10,8 +10,19 @@ def tokenize_text(plain_text) -> list:
 
     tokenized_sentences = []
     for sent in sentences:
-        sent = nltk.word_tokenize(sent, language="russian")
-        tokenized_sentences.append(sent)
+        words = nltk.word_tokenize(sent, language="russian")
+        tokenized_sentences.append(words)
+
+    tokenized_sentences = clean_words(tokenized_sentences)
+
+    return tokenized_sentences
+
+
+def clean_words(tokenized_sentences) -> list:
+    tokenized_sentences = [[word[1:] if word.startswith('.')
+                            else word
+                            for word in sent]
+                           for sent in tokenized_sentences]
 
     return tokenized_sentences
 
@@ -21,7 +32,8 @@ def normalization(sentences) -> list:
 
     extended_stopwords = list(stopwords.words('russian'))
     extended_stopwords.extend(stopwords.words('english'))
-    extended_stopwords.extend(["это", "является", "таким", "образом", 'глава'])
+    extended_stopwords.extend(
+        ["это", "являться", "такой", "образ", 'глава', 'точка', 'зрение', 'который', 'часть'])
 
     extended_punctuation = list(string.punctuation)
     extended_punctuation.extend(["“", "„", "—", "«", "»", '//', "''"])

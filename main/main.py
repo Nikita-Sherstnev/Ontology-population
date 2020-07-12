@@ -1,17 +1,17 @@
 # %%
-
-import pymorphy2
-import correct_instances
-import itertools
-import wikireader
-import nlp
-import model
-import graphics
+# from gensim.models.keyedvectors import KeyedVectors
 import ontology
-from gensim.models import Word2Vec
-from gensim.models.keyedvectors import KeyedVectors
-%reload_ext autoreload
-%autoreload 2
+import model
+import nlp
+import wikireader
+import itertools
+import correct_instances
+import pymorphy2
+from IPython import get_ipython
+ipython = get_ipython()
+
+ipython.magic('load_ext autoreload')
+ipython.magic('autoreload 2')
 
 INPUT_ONTO = '../ontologies/oopOnto.owl'
 OUTPUT_ONTO = '../ontologies/oopOntoPopulated.owl'
@@ -21,14 +21,16 @@ CORRECT_INSTANCES = correct_instances.parse_instances_from_txt(
 
 # %%
 
-# with open('texts/richter_types.txt', 'r', encoding='utf-8') as f:
+# with open('../texts/richter_types_wo_p.txt', 'r', encoding='utf-8') as f:
 #     text_to_parse = f.read()
 
-text_to_parse = wikireader.collect_wiki_articles(['Объектно-ориентированное программирование'],
-                                                 ["Основные понятия", "Определение ООП и его основные концепции",
-                                                  "Особенности реализации", "Объектно-ориентированные языки"])
+text_to_parse = (wikireader
+                 .collect_wiki_articles
+                 (['Объектно-ориентированное программирование'],
+                  ["Основные понятия", "Определение ООП и его основные концепции",
+                   "Особенности реализации", "Объектно-ориентированные языки"]))
 
-print(text_to_parse[:100])
+print(text_to_parse[:500])
 
 # %%
 sentences = nlp.tokenize_text(text_to_parse)
@@ -40,27 +42,26 @@ print(f'Кол-во слов: {str(words_amount)}')
 
 # %%
 
+morph = pymorphy2.MorphAnalyzer()
+
+sentences = [[morph.parse(word)[0].normal_form
+              for word in sent]
+             for sent in sentences]
+
+# %%
+
 sentences_list = nlp.normalization(sentences)
 
-words_amount = sum([len(sent) for sent in sentences_array])
+words_amount = sum([len(sent) for sent in sentences_list])
 print('После нормализации:')
-print(f'Кол-во предложений: {str(len(sentences_array))}')
+print(f'Кол-во предложений: {str(len(sentences_list))}')
 print(f'Кол-во слов: {str(words_amount)}')
 for sent in sentences_list[:5]:
     print(sent)
 
 # %%
 
-morph = pymorphy2.MorphAnalyzer()
-
-sentences_list = [[morph.parse(word)[0].normal_form
-                   for word in sent]
-                  for sent in sentences_list]
-
-
-# %%
-
-sentences = nlp.add_bigrams(sentences_list, 20, 15.0)
+sentences = nlp.add_bigrams(sentences_list, 4, 10.0)
 
 for sent in sentences:
     for word in sent:
@@ -76,9 +77,9 @@ nlp.show_most_frequent_words(sentences, amount=20)
 w2v_model = model.train_word2vec(sentences,
                                  min_count=1,
                                  window=7,
-                                 size=250,
+                                 size=256,
                                  sample=0.001,
-                                 epochs=300,
+                                 epochs=400,
                                  sg=1,
                                  hs=1,
                                  negative=0)
@@ -87,8 +88,7 @@ print('Размер словаря: ', len(w2v_model.wv.vocab))
 
 w2v_vectors = w2v_model.wv
 
-# Save new vectors
-# w2v_model.wv.save('../vectors/sch_types.kv')
+# w2v_model.wv.save('../vectors/ric_types_wo_p.kv')
 
 # %%
 # Reuse vectors
@@ -109,15 +109,6 @@ ontology.populate_ontology(candidate_instances,
                            output_onto=OUTPUT_ONTO)
 
 ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
-
-
-# %%
-# graphics.display_pca_scatterplot(word_vectors,
-#                                  ['класс', 'интерфейс', 'инкапсуляция', 'наследование',
-#                                   'java', 'private', 'protected', 'public',
-#                                   'язык', 'полиморфизм'])
-
-# graphics.display_pca_scatterplot(word_vectors, sample=20)
 
 
 # %%

@@ -12,7 +12,7 @@ class callback(CallbackAny2Vec):
         loss = model.get_latest_training_loss()
         if self.epoch == 0:
             print('Loss after epoch {}: {}'.format(self.epoch, loss))
-        elif(self.epoch % 10 == 0):
+        elif(self.epoch % 50 == 0):
             print('Loss after epoch {}: {}'.format(
                 self.epoch, loss - self.loss_previous_step))
         self.epoch += 1
