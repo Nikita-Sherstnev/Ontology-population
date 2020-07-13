@@ -4,9 +4,12 @@ __pycache__/
 .ipynb_checkpoints/
 
 libs_try_outs/
+configs/
 ontologies/
 texts/
+instances/
 vectors/
 output_ontologies/
 
-correct_instances.py
+TODO
+setup.cfg

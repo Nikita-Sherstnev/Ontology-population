@@ -54,10 +54,6 @@ def filter_by_pos(similar, instances, tagged_words):
     return similar
 
 
-def calculate_similarity_threshold():
-    pass
-
-
 def populate_ontology(candidate_instances, input_onto, output_onto):
     world = World()
 

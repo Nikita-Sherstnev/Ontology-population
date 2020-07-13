@@ -1,34 +1,29 @@
 # %%
-# from gensim.models.keyedvectors import KeyedVectors
+from gensim.models.keyedvectors import KeyedVectors
+import confuse
 import ontology
 import model
 import nlp
-import wikireader
+import input_reader
 import itertools
 import correct_instances
 import pymorphy2
 from IPython import get_ipython
-ipython = get_ipython()
 
+ipython = get_ipython()
 ipython.magic('load_ext autoreload')
 ipython.magic('autoreload 2')
 
-INPUT_ONTO = '../ontologies/oopOnto.owl'
-OUTPUT_ONTO = '../ontologies/oopOntoPopulated.owl'
-CORRECT_INSTANCES_FILE = '../instances/oop_instances.txt'
+config = confuse.Configuration('course_project')
+
+ONTO_BASE = '../ontologies/'
+CORRECT_INSTANCES_BASE = '../instances/'
 CORRECT_INSTANCES = correct_instances.parse_instances_from_txt(
-    CORRECT_INSTANCES_FILE)
+    CORRECT_INSTANCES_BASE + config['correct_instances'].get())
 
 # %%
 
-# with open('../texts/richter_types_wo_p.txt', 'r', encoding='utf-8') as f:
-#     text_to_parse = f.read()
-
-text_to_parse = (wikireader
-                 .collect_wiki_articles
-                 (['Объектно-ориентированное программирование'],
-                  ["Основные понятия", "Определение ООП и его основные концепции",
-                   "Особенности реализации", "Объектно-ориентированные языки"]))
+text_to_parse = input_reader.read(config)
 
 print(text_to_parse[:500])
 
@@ -38,7 +33,6 @@ sentences = nlp.tokenize_text(text_to_parse)
 words_amount = sum([len(sent) for sent in sentences])
 print(f'Кол-во предложений: {str(len(sentences))}')
 print(f'Кол-во слов: {str(words_amount)}')
-
 
 # %%
 
@@ -61,7 +55,9 @@ for sent in sentences_list[:5]:
 
 # %%
 
-sentences = nlp.add_bigrams(sentences_list, 4, 10.0)
+sentences = nlp.add_bigrams(sentences_list,
+                            config['gensim_bigrams']['min_count'].get(),
+                            config['gensim_bigrams']['threshold'].get())
 
 for sent in sentences:
     for word in sent:
@@ -72,29 +68,27 @@ for sent in sentences:
 nlp.show_most_frequent_words(sentences, amount=20)
 
 # %%
-# Train new model
 
 w2v_model = model.train_word2vec(sentences,
-                                 min_count=1,
-                                 window=7,
-                                 size=256,
-                                 sample=0.001,
-                                 epochs=400,
-                                 sg=1,
-                                 hs=1,
-                                 negative=0)
+                                 config['word2vec']['min_count'].get(),
+                                 config['word2vec']['window'].get(),
+                                 config['word2vec']['size'].get(),
+                                 config['word2vec']['sample'].get(),
+                                 config['word2vec']['epochs'].get(),
+                                 config['word2vec']['sg'].get(),
+                                 config['word2vec']['hs'].get(),
+                                 config['word2vec']['negative'].get())
 
 print('Размер словаря: ', len(w2v_model.wv.vocab))
 
 w2v_vectors = w2v_model.wv
 
-# w2v_model.wv.save('../vectors/ric_types_wo_p.kv')
+if config['save_vectors_path'] != 'None':
+    w2v_model.wv.save('../vectors/' + config['save_vectors_path'].get())
 
-# %%
-# Reuse vectors
-
-# w2v_vectors = KeyedVectors.load('../vectors/ric_types.kv')
-# w2v_vectors = w2v_model.wv
+if config['reuse_vectors_path'] != 'None':
+    w2v_vectors = KeyedVectors.load('../vectors/' + config['reuse_vectors_path'].get())
+    w2v_vectors = w2v_model.wv
 
 # %%
 
@@ -102,11 +96,13 @@ tagged_words = nlp.pos_tagging(sentences)
 # %%
 
 candidate_instances = ontology.find_candidate_instances(
-    w2v_vectors, tagged_words, INPUT_ONTO, 30)
+    w2v_vectors, tagged_words,
+    ONTO_BASE + config['input_onto'].get(),
+    config['similarity_top'].get())
 
 ontology.populate_ontology(candidate_instances,
-                           input_onto=INPUT_ONTO,
-                           output_onto=OUTPUT_ONTO)
+                           input_onto=ONTO_BASE + config['input_onto'].get(),
+                           output_onto=ONTO_BASE + config['output_onto'].get())
 
 ontology.print_metrics(candidate_instances, CORRECT_INSTANCES)
 # %%
