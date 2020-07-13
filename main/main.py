@@ -108,9 +108,7 @@ ontology.populate_ontology(candidate_instances,
                            input_onto=INPUT_ONTO,
                            output_onto=OUTPUT_ONTO)
 
-ontology.calculate_metrics(candidate_instances, CORRECT_INSTANCES)
-
-
+ontology.print_metrics(candidate_instances, CORRECT_INSTANCES)
 # %%
 print(dict(itertools.islice(tagged_words.items(), 50)))
 

@@ -79,24 +79,28 @@ def _save_instance(onto, onto_class, inst):
 
 def calculate_metrics(candidate_instances, correct_instances):
     matches_counter = 0
-    new_instances_counter = 0
+    new_instances_amount = sum(map(len, candidate_instances.values()))
     correct_instances_amount = len(correct_instances)
     correct_instances = correct_instances.copy()
 
     for _, instances in candidate_instances.items():
         for inst in instances:
-            new_instances_counter += 1
-
             if inst[0] in correct_instances[:]:
                 matches_counter += 1
                 correct_instances.remove(inst[0])
 
     recall = matches_counter/correct_instances_amount
-    precision = matches_counter/new_instances_counter
+    precision = matches_counter/new_instances_amount
     f_measure = 2 * (precision * recall) / (precision + recall)
 
-    print('Экземпляров в тексте: ',  correct_instances_amount)
-    print('Всего новых экземляров: ', str(new_instances_counter))
+    return matches_counter, recall, precision, f_measure
+
+
+def print_metrics(candidate_instances, correct_instances):
+    matches_counter, recall, precision, f_measure = calculate_metrics(
+        candidate_instances, correct_instances)
+    print('Экземпляров в тексте: ',  len(correct_instances))
+    print('Всего новых экземляров: ', sum(map(len, candidate_instances.values())))
     print('Правильно извлеченные экземпляры: ', matches_counter)
     print('Полнота: ', recall)
     print('Точность: ', precision)
